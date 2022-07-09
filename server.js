@@ -2,7 +2,10 @@ const inquirer = require('inquirer');
 // const { removeListener } = require('./db/connection');
 // const db = require('./db/connection');
 const cTable = require('console.table');
-const db = require('./db')
+const db = require('./db');
+const { addNewDepartment } = require('./db');
+
+const departmentAdd = [];
 
 
 const viewAllRoles = () => {
@@ -10,6 +13,41 @@ const viewAllRoles = () => {
         console.table(data[0]);
     })
 }
+
+const viewAllEmployees = () => {
+    db.findAllEmployees().then(data => {
+        console.table(data[0]);
+    })
+}
+
+const viewAllDepartments = () => {
+    db.findAllDepartments().then(data => {
+        console.table(data[0]);
+    })
+}
+
+const addDepartmentPrompt = () => {
+    return inquirer.prompt([
+        {
+            type: 'input',
+            name: 'newDepartment',
+            message: 'What department would you like to add?',
+            validate: newDepartment => {
+                if (newDepartment) {
+                  return true;
+                } else { 
+                  console.log('Please enter department name.');
+                  return false;
+                }
+            }
+        }
+    ])
+}
+
+const addDepartment  = () => {
+
+}
+
 
 const promptUser = () => {
     return inquirer
@@ -23,14 +61,19 @@ const promptUser = () => {
     ])
     .then((answers) => {
         if (answers.mainMenu === 'View all employees') {
-            console.log(answers);
-            // table of id, first_name, last_name, title (role), department, salary, and manager
-            // FULL JOIN of employee and role.   Only need to link department id with actual department name. 
+            viewAllEmployees()
+            // ADD EMPLOYEEPROMPT()
             // View all employees by department
                 // SELECT * employees JOIN ROLE and DEPARTMENT, then SORT
             // View all employees by manager
                 // SELECT * employees, SORT by manager ID, but also join manager name from within table
-            
+            promptUser()
+                //     {
+                //         type: 'confirm',
+                //         name: 'updatedEmployee',
+                //         message: 'What would you to update an employee role?',
+                //         choices: ['View all employees', 'Add an employee', 'Update an employee role', 'View all roles', 'Add a role', 'View all departments', 'Add a Department', 'Exit']
+                //     }
         }
         if (answers.mainMenu === 'Add an employee') {
             console.log(answers); 
@@ -70,13 +113,8 @@ const promptUser = () => {
         if (answers.mainMenu === 'View all roles') {
             viewAllRoles();
                 promptUser();
-            // SELECT * FROM role; 
             // JOIN department ID with actual DEPARTMENT NAME Need to link department id with department name
             // table with ID, Role Title, department, and salary
-            // ** EXAMPLE (need to check role and id values): 
-            // UPDATE employee
-            // SET role = 1
-            // WHERE id = 3;
         }
 
         if (answers.mainMenu === 'Add a role') {
@@ -88,45 +126,49 @@ const promptUser = () => {
             // added <role> to the <department>ing department.
         }
         if (answers.mainMenu === 'View all departments') {
-            console.log(answers);
-            db.query(`SELECT * FROM role`, (err, rows) => {
-                console.table(rows);
+            viewAllDepartments();
                 promptUser();
-              });
-            // *** CORRECT QUERY FOR THIS ONE:   SELECT * FROM role; ***  
-            // table with ID, and name of roles (Engineering, Finance, Legal, Sales)
-            // another option to delete departments, roles, and employees
-            const sql = `DELETE FROM department WHERE id = ?`
-            const params = [req.params.id];
-            db.query(sql, params, (err, row) => {
-                if (err) {
-                    console.log(err);
-                }
-                console.log(row);
-            }),
-            db.query(`DELETE FROM roles WHERE id = ?`, 1, (err,result) => {
-                if (err) {
-                    console.log(err);
-                }
-                console.log(result);
-            }),
-            db.query(`DELETE FROM employees WHERE id = ?`, 1, (err,result) => {
-                if (err) {
-                    console.log(err);
-                }
-                console.log(result);
-            })
+        }
+            // // another option to delete departments, roles, and employees
+            // const sql = `DELETE FROM department WHERE id = ?`
+            // const params = [req.params.id];
+            // db.query(sql, params, (err, row) => {
+            //     if (err) {
+            //         console.log(err);
+            //     }
+            //     console.log(row);
+            // }),
+            // db.query(`DELETE FROM roles WHERE id = ?`, 1, (err,result) => {
+            //     if (err) {
+            //         console.log(err);
+            //     }
+            //     console.log(result);
+            // }),
+            // db.query(`DELETE FROM employees WHERE id = ?`, 1, (err,result) => {
+            //     if (err) {
+            //         console.log(err);
+            //     }
+            //     console.log(result);
+            // })
             // *** EXAMPLE, numbers not correct
             // DELETE FROM employees
             // WHERE id = 3
             // another option to view total utilized budget of a department
             // This I don't know... how to tell when budget is utilized? 
-        }
         if (answers.mainMenu === 'Add a Department') {
-            console.log(answers); 
-            //ALTER TABLE
-            // what is the name of the department?
-            // added <department name> to the database
+            addDepartmentPrompt()
+            .then(department => {
+                let dept = department.newDepartment
+                console.log(dept)
+                db.addNewDepartment(dept).then(() => {
+                promptUser()
+                })
+            })
+            // message: "Added <new department> to the database"
+            // promptUser()
+//             console.log(answers); 
+//             -- INSERT INTO department (id, name)
+// --              VALUES (15, 'Customer Service');
         }
         if (answers.mainMenu === 'Exit') {
             return;
