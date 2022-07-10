@@ -27,13 +27,19 @@ class Queries {
         return this.connection.promise().query(`SELECT * FROM department;`)
     }
     addNewDepartment (departmentAdd) {
-        console.log("Adding Department!");
-        // console.log(department)
+        // console.log("Adding Department!");
         return this.connection
         .promise()
         .query
         (`INSERT INTO department (name)
         VALUES (?);`, departmentAdd)
+    }
+    addNewRole (role) {
+        return this.connection
+        .promise()
+        .query
+        (`INSERT INTO role (title, salary, department_id)
+        VALUES (?,?,?);`, role)
     }
     
     deleteDepartment() {
