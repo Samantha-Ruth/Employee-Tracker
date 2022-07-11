@@ -53,10 +53,18 @@ const addRolePrompt = () => {
             }
         },
         {
-            type: 'list',
+            type: 'input',
             name: 'department_id',
-            message: 'To what department does this role belong?',
-            choices: [2, 'Salesperson', 'Lead Engineer', 'Software Engineer', 'Account Manager', 'Accountant', 'Legal Team Lead', 'Lawyer']
+            message: 'To what department does this role belong? Please enter the corresponding number: 1. Engineering, 2. Finance, 3. Legal, 4. Sales',
+            // validate: value => {
+            //     const pass = value.match(/1||2||3||4/i);
+            //     if (pass) {
+            //         return true;
+            //     } else {
+            //         console.log('Please enter corresponding number');
+            //         return false;
+            //     }
+            // }
         }
     ])
     // .then((answers) => {
@@ -95,7 +103,7 @@ const addEmployeePrompt = () => {
         {
             type: 'input',
             name: 'role',
-            message: "What is the employee's role?",
+            message: "What is the employee's role? Please enter corresponding number: 1. Sales Lead, 2. Salesperson, 3. Lead Engineer, 4. Software Engineer, 5. Account Manager, 6. Accountant, 7. Legal Team Lead, 8. Lawyer",
             validate: role => {
                 if (role) {
                     return true;
@@ -106,10 +114,9 @@ const addEmployeePrompt = () => {
             }
         },
         {
-            type: 'list',
+            type: 'input',
             name: 'manager',
-            message: 'To what manager does this employee report?',
-            choices: ['name', 'somethinng', 'None']
+            message: 'To what manager does this employee report? Please enter corresponding number: 1. John Doe, 2. Mike Chan, 3. Ashley Rodriquez, 4. Kevin Tupik, 5. Kunal Singh, 6. Malia Brown',
         }
     ])
     // .then((answers) => {
@@ -138,6 +145,26 @@ const promptUser = () => {
             }
             if (answers.mainMenu === 'Add an employee') {
                 console.log(answers);
+                    addEmployeePrompt()
+                        .then(rawEmployees => {
+                            console.log(rawEmployees)
+                            const employee = Object.values(rawEmployees);
+                            console.log(employee)
+                             db.addNewEmployee(employee).then(() => {
+                                console.log("\n");
+                                console.log(`${rawEmployees.first_name} added as a new employee!`);
+                                console.log("\n");
+                                promptUser()
+                            })
+                        })
+                    }
+    
+                    // ALTER TABLE
+                    // what is the name of the role?
+                    // what is the salary of the role?
+                    // what department does the role belong to? (list)
+                    // added <role> to the <department>ing department.
+
                 // INSERT INTO
                 // what is the employee's first name?
                 // what is the employee's last name?
@@ -145,18 +172,7 @@ const promptUser = () => {
                 // provided with list of roles
                 // who is the employee's manager?
                 // provided with list of employees
-                const sql = `INSERT INTO employee (id, first_name, last_name, role_id, manager_id)
-            VALUES (?,?,?,?,?)`;
-                //  add above values into below params
-                const params = [15, "Ronald", "Firbank", 1, 1];
-                db.query(sql, params, (err, result) => {
-                    if (err) {
-                        console.log(err);
-                    }
-                    console.table(result);
-                });
-                // added "name" to the database.
-            }
+            
             if (answers.mainMenu === 'Update an employee role') {
                 console.log(answers);
                 // ALTER TABLE
@@ -193,10 +209,6 @@ const promptUser = () => {
                         })
                     })
             }
-
-
-
-
             if (answers.mainMenu === 'Add a role') {
                 addRolePrompt()
                     .then(rawRoles => {

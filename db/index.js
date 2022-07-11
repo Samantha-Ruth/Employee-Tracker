@@ -41,6 +41,13 @@ class Queries {
         (`INSERT INTO role (title, salary, department_id)
         VALUES (?,?,?);`, role)
     }
+    addNewEmployee (employee) {
+        return this.connection
+        .promise()
+        .query
+        (`INSERT INTO employee (first_name, last_name, role_id, manager_id)
+        VALUES (?,?,?,?);`, employee)
+    }
     
     deleteDepartment() {
         console.log("Delete Department Query hit!!!");
