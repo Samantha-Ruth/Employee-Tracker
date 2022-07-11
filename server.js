@@ -78,7 +78,9 @@ const addDepartmentPrompt = () => {
         })
 }
 
-const addRolePrompt = () => {
+const addRolePrompt = (department) => {
+    db.addRole(department).then(departmentArray => {
+        let departmentChoices = departmentArray[0].map(department => ({ name: department.name, value: department.id }))
     return inquirer
         .prompt([
             {
@@ -108,9 +110,10 @@ const addRolePrompt = () => {
                 }
             },
             {
-                type: 'input',
+                type: 'list',
                 name: 'department_id',
-                message: 'To what department does this role belong? Please enter the corresponding number: 1. Engineering, 2. Finance, 3. Legal, 4. Sales',
+                message: 'To what department does this role belong?',
+                choices: departmentChoices
             }
         ])
         .then(rawRoles => {
@@ -124,6 +127,7 @@ const addRolePrompt = () => {
                 promptUser()
             })
         })
+    })
 }
 
 const addEmployeePrompt = () => {
