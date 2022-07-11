@@ -34,12 +34,19 @@ class Queries {
         (`INSERT INTO department (name)
         VALUES (?);`, departmentAdd)
     }
-    addNewRole (role) {
+    addRole (role) {
+        "Add Role Query hit!"
+        return this.connection
+        .promise()
+        .query
+        (`SELECT * FROM department`)
+    }
+    addNewRole () {
         return this.connection
         .promise()
         .query
         (`INSERT INTO role (title, salary, department_id)
-        VALUES (?,?,?);`, role)
+        VALUES (?,?,?);`, departmentChoices)
     }
     addNewEmployee (employee) {
         return this.connection

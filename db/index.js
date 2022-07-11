@@ -8,7 +8,7 @@ class Queries {
         console.log("Query hit!!!");
         return this.connection
         .promise()
-        .query(`SELECT role.id, role.title, department.name, role.salary
+        .query(`SELECT role.id, role.title, department.name AS department, role.salary
         FROM role 
         LEFT JOIN department ON role.department_id = department.id;`)
     }
@@ -48,6 +48,7 @@ class Queries {
         (`INSERT INTO employee (first_name, last_name, role_id, manager_id)
         VALUES (?,?,?,?);`, employee)
     }
+
     
     deleteDepartment() {
         console.log("Delete Department Query hit!!!");
