@@ -1,9 +1,10 @@
-const inquirer = require('inquirer');
-const { removeListener } = require('./db/connection');
-// const db = require('./db/connection');
-const cTable = require('console.table');
-const db = require('./db');
-const { addNewDepartment, deleteRole } = require('./db');
+
+// const inquirer = require('inquirer');
+// // const { removeListener } = require('./db/connection');
+// // const db = require('./db/connection');
+// const cTable = require('console.table');
+// const db = require('./db');
+// const { addNewDepartment, deleteRole } = require('./db');
 
 
 const addDepartmentPrompt = () => {
@@ -23,6 +24,33 @@ const addDepartmentPrompt = () => {
         }
     ])
 }
+
+// const promptDepartmentOptions = () => {
+//     return inquirer.prompt([
+//         {
+//             type: 'confirm',
+//             name: 'departmentOptions',
+//             message: 'Do you want to add, delete, or edit a department?',
+
+//             type: confirm
+//             name: 'addDepartment',
+//             message: 'Do you want to add a department?',
+
+
+//             type:
+//             name: 'editDepartment',
+//             message: 'Do you want to edit a department?',
+
+//             when: 
+//             type: 'input',
+            
+//             type: 
+//             name: 'deleteDepartment',
+//             message: 'Do  you want to delete a department?'
+//             choices: ['Add a department', 'Delete a department', 'Edit a department', 'Return to main menu']
+//         }
+//     ])
+// }
 
 const addRolePrompt = () => {
     return inquirer.prompt([
@@ -56,8 +84,20 @@ const addRolePrompt = () => {
             type: 'input',
             name: 'department_id',
             message: 'To what department does this role belong? Please enter the corresponding number: 1. Engineering, 2. Finance, 3. Legal, 4. Sales',
+            // validate: value => {
+            //     const pass = value.match(/1||2||3||4/i);
+            //     if (pass) {
+            //         return true;
+            //     } else {
+            //         console.log('Please enter corresponding number');
+            //         return false;
+            //     }
+            // }
         }
     ])
+    // .then((answers) => {
+    // if (answers.department_id === 'Sales Lead') 
+// })
 }
 
 const addEmployeePrompt = () => {
@@ -107,6 +147,9 @@ const addEmployeePrompt = () => {
             message: 'To what manager does this employee report? Please enter corresponding number: 1. John Doe, 2. Mike Chan, 3. Ashley Rodriquez, 4. Kevin Tupik, 5. Kunal Singh, 6. Malia Brown',
         }
     ])
+    // .then((answers) => {
+    // if (answers.department_id === 'Sales Lead') 
+// })
 }
 
 
@@ -143,8 +186,34 @@ const promptUser = () => {
                             })
                         })
                     }
+    
+                    // ALTER TABLE
+                    // what is the name of the role?
+                    // what is the salary of the role?
+                    // what department does the role belong to? (list)
+                    // added <role> to the <department>ing department.
+
+                // INSERT INTO
+                // what is the employee's first name?
+                // what is the employee's last name?
+                // what is the employee's role?
+                // provided with list of roles
+                // who is the employee's manager?
+                // provided with list of employees
+            
             if (answers.mainMenu === 'Update an employee role') {
                 console.log(answers);
+                // ALTER TABLE
+                // ** EXAMPLE (need to check role and id values): 
+                // UPDATE employee
+                // SET role = 1
+                // WHERE id = 3;
+
+                // Which employee's role would you like to update?
+                // list of employees
+                // Which role do you wnat to assign the selected employee?
+                // list of roles
+
             }
             if (answers.mainMenu === 'View all roles') {
                     db.findAllRoles().then(data => {
@@ -166,6 +235,12 @@ const promptUser = () => {
                             promptUser()
                         })
                     })
+
+                // ALTER TABLE
+                // what is the name of the role?
+                // what is the salary of the role?
+                // what department does the role belong to? (list)
+                // added <role> to the <department>ing department.
             }
             if (answers.mainMenu === 'View all departments') {
                 db.findAllDepartments().then(data => {
@@ -175,6 +250,32 @@ const promptUser = () => {
                 promptDepartmentOptions();
 
             }
+            // // another option to delete departments, roles, and employees
+            // const sql = `DELETE FROM department WHERE id = ?`
+            // const params = [req.params.id];
+            // db.query(sql, params, (err, row) => {
+            //     if (err) {
+            //         console.log(err);
+            //     }
+            //     console.log(row);
+            // }),
+            // db.query(`DELETE FROM roles WHERE id = ?`, 1, (err,result) => {
+            //     if (err) {
+            //         console.log(err);
+            //     }
+            //     console.log(result);
+            // }),
+            // db.query(`DELETE FROM employees WHERE id = ?`, 1, (err,result) => {
+            //     if (err) {
+            //         console.log(err);
+            //     }
+            //     console.log(result);
+            // })
+            // *** EXAMPLE, numbers not correct
+            // DELETE FROM employees
+            // WHERE id = 3
+            // another option to view total utilized budget of a department
+            // This I don't know... how to tell when budget is utilized? 
             if (answers.mainMenu === 'Add a Department') {
                 addDepartmentPrompt()
                     .then(department => {
