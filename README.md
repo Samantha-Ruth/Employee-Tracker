@@ -50,9 +50,9 @@ Image of department table:
 ## Links
 
 
-Link to video of project:
+Link to video of project: https://drive.google.com/file/d/15Rr9C0xFYq2Zomc3uLrZSyaU8T9ismEL/view
 
-The link to the project is here: 
+** I am so sorry!   When I tried to create a video, my server crashed.  I'm working on the problem and will put it right as soon as I can! 
 
 The url of the Git repository is here: https://github.com/Samantha-Ruth/Employee-Tracker
 
