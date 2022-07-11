@@ -81,115 +81,146 @@ const addDepartmentPrompt = () => {
 const addRolePrompt = () => {
     db.addRole().then(departmentArray => {
         let departmentChoices = departmentArray[0].map(department => ({ name: department.name, value: department.id }))
-    return inquirer
-        .prompt([
+        return inquirer
+            .prompt([
+                {
+                    type: 'input',
+                    name: 'title',
+                    message: 'What role would you like to add?',
+                    validate: newRole => {
+                        if (newRole) {
+                            return true;
+                        } else {
+                            console.log('Please enter new role.');
+                            return false;
+                        }
+                    }
+                },
+                {
+                    type: 'input',
+                    name: 'salary',
+                    message: 'What is the salary?',
+                    validate: salary => {
+                        if (salary) {
+                            return true;
+                        } else {
+                            console.log('Please enter a salary');
+                            return false;
+                        }
+                    }
+                },
+                {
+                    type: 'list',
+                    name: 'department_id',
+                    message: 'To what department does this role belong?',
+                    choices: departmentChoices
+                }
+            ])
+            .then(rawRoles => {
+                console.log(rawRoles)
+                let role = [rawRoles.title, rawRoles.salary, rawRoles.department_id];
+                console.log(role)
+                db.addNewRole(role).then(() => {
+                    console.log("\n");
+                    console.log(`${rawRoles.title} added as a new role!`);
+                    console.log("\n");
+                    promptUser()
+                })
+            })
+    })
+}
+
+const addEmployeePrompt = () => {
+    db.addEmployeeRole().then(roleArray => {
+        let roleChoices = roleArray[0].map(role => ({ name: role.title, value: role.id }))
+        return inquirer.prompt([
             {
                 type: 'input',
-                name: 'title',
-                message: 'What role would you like to add?',
-                validate: newRole => {
-                    if (newRole) {
+                name: 'first_name',
+                message: 'What is the first name of the new employee?',
+                validate: first_name => {
+                    if (first_name) {
                         return true;
                     } else {
-                        console.log('Please enter new role.');
+                        console.log('Please enter first name.');
                         return false;
                     }
                 }
             },
             {
                 type: 'input',
-                name: 'salary',
-                message: 'What is the salary?',
-                validate: salary => {
-                    if (salary) {
+                name: 'last_name',
+                message: 'What is the last name of the new employee?',
+                validate: last_name => {
+                    if (last_name) {
                         return true;
                     } else {
-                        console.log('Please enter a salary');
+                        console.log('Please enter last name.');
                         return false;
                     }
                 }
             },
             {
                 type: 'list',
-                name: 'department_id',
-                message: 'To what department does this role belong?',
-                choices: departmentChoices
+                name: 'role',
+                message: "What is the employee's role?",
+                choices: roleChoices,
+                validate: role => {
+                    if (role) {
+                        return true;
+                    } else {
+                        console.log("Please enter employee's role");
+                        return false;
+                    }
+                }
             }
         ])
-        .then(rawRoles => {
-            console.log(rawRoles)
-            let role = [rawRoles.title, rawRoles.salary, rawRoles.department_id];
-            console.log(role)
-            db.addNewRole(role).then(() => {
-                console.log("\n");
-                console.log(`${rawRoles.title} added as a new role!`);
-                console.log("\n");
-                promptUser()
+            .then(incompleteEmployees => {
+                console.log(incompleteEmployees)
+                const employee = Object.values(incompleteEmployees);
+                console.log(employee)
+                db.addEmployeeManager()
+                    .then(managerArray => {
+                        let managerChoices = managerArray[0].map(manager => ({ name: manager.manager, value: manager.id }))
+                        return inquirer.prompt([
+                            {
+                                type: 'list',
+                                name: 'manager',
+                                message: 'To which manager does this employee report?',
+                                choices: managerChoices
+                            }
+                        ])
+                            .then(employeeManager => {
+                                let employeeManagerID = employeeManager.manager;
+                                employee.push(employeeManagerID)
+                            })
+                    })
+                .then(show => {
+                    console.log(employee)
+                    db.addNewEmployee(employee).then(data => {
+                        console.log("\n \n")
+                        console.table(data[1]);
+                    })
+                })  
             })
-        })
     })
-}
 
-const addEmployeePrompt = () => {
-    return inquirer.prompt([
-        {
-            type: 'input',
-            name: 'first_name',
-            message: 'What is the first name of the new employee?',
-            validate: first_name => {
-                if (first_name) {
-                    return true;
-                } else {
-                    console.log('Please enter first name.');
-                    return false;
-                }
-            }
-        },
-        {
-            type: 'input',
-            name: 'last_name',
-            message: 'What is the last name of the new employee?',
-            validate: last_name => {
-                if (last_name) {
-                    return true;
-                } else {
-                    console.log('Please enter last name.');
-                    return false;
-                }
-            }
-        },
-        {
-            type: 'input',
-            name: 'role',
-            message: "What is the employee's role? Please enter corresponding number: 1. Sales Lead, 2. Salesperson, 3. Lead Engineer, 4. Software Engineer, 5. Account Manager, 6. Accountant, 7. Legal Team Lead, 8. Lawyer",
-            validate: role => {
-                if (role) {
-                    return true;
-                } else {
-                    console.log("Please enter employee's role");
-                    return false;
-                }
-            }
-        },
-        {
-            type: 'input',
-            name: 'manager',
-            message: 'To what manager does this employee report? Please enter corresponding number: 1. John Doe, 2. Mike Chan, 3. Ashley Rodriquez, 4. Kevin Tupik, 5. Kunal Singh, 6. Malia Brown',
-        }
-    ])
-        .then(rawEmployees => {
-            console.log(rawEmployees)
-            const employee = Object.values(rawEmployees);
-            console.log(employee)
-            db.addNewEmployee(employee).then(() => {
-                console.log("\n");
-                console.log(`${rawEmployees.first_name} added as a new employee!`);
-                console.log("\n");
-                promptUser()
-            })
-        })
-}
 
+
+
+    // .then(rawEmployees => {
+    //     console.log(rawEmployees)
+    //     const employee = Object.values(rawEmployees);
+    //     console.log(employee)
+    // db.addNewEmployee(employee).then(() => {
+    //     console.log("\n");
+    //     console.log(`${rawEmployees.first_name} added as a new employee!`);
+    //     console.log("\n");
+    //     promptUser()
+    // })
+    // })
+
+}
 
 const promptUser = () => {
     return inquirer
@@ -202,10 +233,10 @@ const promptUser = () => {
                     'View all employees',
                     'Add an employee',
                     'Update an employee role',
-                    'View all roles', 
-                    'Add a role', 
-                    'View all departments', 
-                    'Add a Department', 
+                    'View all roles',
+                    'Add a role',
+                    'View all departments',
+                    'Add a Department',
                     'Exit']
             }
         ])

@@ -47,6 +47,20 @@ class Queries {
         (`INSERT INTO role (title, salary, department_id)
         VALUES (?,?,?);`, role)
     }
+    addEmployeeRole (roleArray) {
+        return this.connection
+        .promise()
+        .query
+        (`SELECT * FROM role`, (roleArray))
+    }
+    addEmployeeManager (managerArray) {
+        return this.connection
+        .promise()
+        .query
+        (`SELECT CONCAT(employee.first_name, ' ',employee.last_name) AS manager, employee.id
+        FROM employee
+        LEFT JOIN employee manager ON manager.id = employee.manager_id`, (managerArray))
+    }
     addNewEmployee (employee) {
         return this.connection
         .promise()
