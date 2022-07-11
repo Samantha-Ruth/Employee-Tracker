@@ -78,8 +78,8 @@ const addDepartmentPrompt = () => {
         })
 }
 
-const addRolePrompt = (department) => {
-    db.addRole(department).then(departmentArray => {
+const addRolePrompt = () => {
+    db.addRole().then(departmentArray => {
         let departmentChoices = departmentArray[0].map(department => ({ name: department.name, value: department.id }))
     return inquirer
         .prompt([
