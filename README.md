@@ -7,6 +7,7 @@ This project uses a combination of node, inquirer package, npm console.table, SQ
 This project was a great introductionto SQL.  I practiced creating schemas and seed files, as well as learning the SQL language, using join to create database tables and other queries to edit and delete the data.  I also worked with npm inquirer again, as well as learned about creating a connection to the server using constructors.  
 
 Screen Shot of Command Line:
+![Screenshot of Application](https://user-images.githubusercontent.com/64170123/178384580-7d8837a6-875f-437a-86da-308b57351e3d.jpg)
 
 ## Table of Contents
 
@@ -37,12 +38,14 @@ Finally, connect the server by entering "npm start" into the command line.
 The user will be presented with a list of options regarding an employee database.  They can view all departments, roles, and employees, as well as add departments, roles, and employees.  The user gets access to the database using the console line and can adjust data as desired.  
 
 Image of employee table":
+![Screenshot of Employees](https://user-images.githubusercontent.com/64170123/178384602-b23ed9db-53fc-4b43-bddb-ff2b0be9d63b.jpg)
 
 
 Image of roles table:
-
+![Screenshot of Roles](https://user-images.githubusercontent.com/64170123/178384607-947f2266-b47b-4e36-9501-3afddf20a915.jpg)
 
 Image of department table:
+![Screen shot of department](https://user-images.githubusercontent.com/64170123/178384619-b45b8c5f-d782-419e-8d42-2880d87f9c9f.jpg)
 
 
 
@@ -50,9 +53,8 @@ Image of department table:
 ## Links
 
 
-Link to video of project: https://drive.google.com/file/d/15Rr9C0xFYq2Zomc3uLrZSyaU8T9ismEL/view
+Link to video of project: https://drive.google.com/file/d/15iPjD0eDP5efbM6klVUt2U8oNl0m97Pz/view
 
-** I am so sorry!   When I tried to create a video, my server crashed.  I'm working on the problem and will put it right as soon as I can! 
 
 The url of the Git repository is here: https://github.com/Samantha-Ruth/Employee-Tracker
 
