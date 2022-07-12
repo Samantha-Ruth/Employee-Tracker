@@ -53,37 +53,102 @@ const addDepartmentPrompt = () => {
 // }
 
 const addRolePrompt = () => {
-    return inquirer.prompt([
-        {
-            type: 'input',
-            name: 'title',
-            message: 'What role would you like to add?',
-            validate: newRole => {
-                if (newRole) {
-                    return true;
-                } else {
-                    console.log('Please enter new role.');
-                    return false;
-                }
-            }
-        },
-        {
-            type: 'input',
-            name: 'salary',
-            message: 'What is the salary?',
-            validate: salary => {
-                if (salary) {
-                    return true;
-                } else {
-                    console.log('Please enter a salary');
-                    return false;
-                }
-            }
-        },
-        {
-            type: 'input',
-            name: 'department_id',
-            message: 'To what department does this role belong? Please enter the corresponding number: 1. Engineering, 2. Finance, 3. Legal, 4. Sales',
+        addRole()
+        // db.query(sql, (err, departmentArray) => {
+        //     if (err) throw err;
+            //const departmentChoices = departmentArray.map(department => ({ name: department.name, value: department.id }));
+            return inquirer
+                .prompt([
+                    {
+                        type: 'input',
+                        name: 'title',
+                        message: 'What role would you like to add?',
+                        validate: newRole => {
+                            if (newRole) {
+                                return true;
+                            } else {
+                                console.log('Please enter new role.');
+                                return false;
+                            }
+                        }
+                    },
+                    {
+                        type: 'input',
+                        name: 'salary',
+                        message: 'What is the salary?',
+                        validate: salary => {
+                            if (salary) {
+                                return true;
+                            } else {
+                                console.log('Please enter a salary');
+                                return false;
+                            }
+                        }
+                    },
+                    {
+                        type: 'list',
+                        name: 'department_id',
+                        message: 'To what department does this role belong?'
+                        // Please enter the corresponding number: 1. Engineering, 2. Finance, 3. Legal, 4. Sales'
+                        ,
+                        choices: departmentChoices
+                    }
+                ])
+                // .then(rawRoles => {
+                //     console.log(rawRoles)
+                //     const role = Object.values(rawRoles);
+                //     console.log(role)
+                //      db.addNewRole(role).then(() => {
+                //         console.log("\n");
+                //         console.log(`${rawRoles.title} added as a new role!`);
+                //         console.log("\n");
+                //         promptUser()
+                //     })
+                // })
+                .then(rawRoles => {
+                    console.log(rawRoles)
+                    let role = [rawRoles.title, rawRoles.salary, rawRoles.department_id];
+                    console.log(role)
+                    db.addNewRole(role).then(() => {
+                        console.log("\n");
+                        console.log(`${rawRoles.title} added as a new role!`);
+                        console.log("\n");
+                        promptUser()
+                    })
+        //         })
+        // }
+    
+    // return inquirer.prompt([
+    //     {
+    //         type: 'input',
+    //         name: 'title',
+    //         message: 'What role would you like to add?',
+    //         validate: newRole => {
+    //             if (newRole) {
+    //                 return true;
+    //             } else {
+    //                 console.log('Please enter new role.');
+    //                 return false;
+    //             }
+    //         }
+    //     },
+    //     {
+    //         type: 'input',
+    //         name: 'salary',
+    //         message: 'What is the salary?',
+    //         validate: salary => {
+    //             if (salary) {
+    //                 return true;
+    //             } else {
+    //                 console.log('Please enter a salary');
+    //                 return false;
+    //             }
+    //         }
+    //     },
+    //     {
+    //         type: 'input',
+    //         name: 'department_id',
+    //         message: 'To what department does this role belong? Please enter the corresponding number: 1. Engineering, 2. Finance, 3. Legal, 4. Sales',
             // validate: value => {
             //     const pass = value.match(/1||2||3||4/i);
             //     if (pass) {
@@ -93,8 +158,8 @@ const addRolePrompt = () => {
             //         return false;
             //     }
             // }
-        }
-    ])
+        })
+    // ])
     // .then((answers) => {
     // if (answers.department_id === 'Sales Lead') 
 // })
