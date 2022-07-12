@@ -186,6 +186,7 @@ const addEmployeePrompt = () => {
                                 db.addNewEmployee(employee).then(() => {
                                     console.log("\n \n")
                                     console.log(`New employee added!`)
+                                    console.log("\n")
                                     promptUser()
                                 })
                             })
@@ -228,6 +229,7 @@ const updateEmployeePrompt = () => {
                                 db.updateEmployee(update).then(() => {                                
                                 console.log("\n \n")
                                 console.log(`Employee updated!`)
+                                console.log("\n")
                                 promptUser()
                             })
                         })
