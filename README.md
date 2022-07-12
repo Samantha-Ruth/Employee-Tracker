@@ -6,7 +6,6 @@ This project uses a combination of node, inquirer package, npm console.table, SQ
 
 This project was a great introductionto SQL.  I practiced creating schemas and seed files, as well as learning the SQL language, using join to create database tables and other queries to edit and delete the data.  I also worked with npm inquirer again, as well as learned about creating a connection to the server using constructors.  
 
-Screen Shot of Command Line:
 ![Screenshot of Application](https://user-images.githubusercontent.com/64170123/178384580-7d8837a6-875f-437a-86da-308b57351e3d.jpg)
 
 ## Table of Contents
