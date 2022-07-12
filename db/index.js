@@ -5,7 +5,6 @@ class Queries {
         this.connection = connection
     }
     findAllRoles() {
-        console.log("Query hit!!!");
         return this.connection
         .promise()
         .query(`SELECT role.id, role.title, department.name AS department, role.salary
@@ -23,11 +22,9 @@ class Queries {
             LEFT JOIN employee manager ON manager.id = employee.manager_id;`)
     }
     findAllDepartments() {
-        console.log("Department Query hit!!!");
         return this.connection.promise().query(`SELECT * FROM department;`)
     }
     addNewDepartment (departmentAdd) {
-        // console.log("Adding Department!");
         return this.connection
         .promise()
         .query
@@ -94,7 +91,6 @@ class Queries {
 
     
     deleteDepartment() {
-        console.log("Delete Department Query hit!!!");
         return this.connection.promise().query(`DELETE FROM department WHERE id = ?`)
     }
     deleteRole() {
