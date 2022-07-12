@@ -3,7 +3,7 @@ const { removeListener } = require('./db/connection');
 // const db = require('./db/connection');
 const cTable = require('console.table');
 const db = require('./db');
-const { findAllDepartments } = require('./db');
+const { findAllDepartments, addEmployeeList } = require('./db');
 // const { addNewDepartment, deleteRole } = require('./db');
 
 const init = () => {
@@ -164,15 +164,7 @@ const addEmployeePrompt = () => {
                 type: 'list',
                 name: 'role',
                 message: "What is the employee's role?",
-                choices: roleChoices,
-                validate: role => {
-                    if (role) {
-                        return true;
-                    } else {
-                        console.log("Please enter employee's role");
-                        return false;
-                    }
-                }
+                choices: roleChoices
             }
         ])
             .then(incompleteEmployees => {
@@ -194,78 +186,110 @@ const addEmployeePrompt = () => {
                                 let employeeManagerID = employeeManager.manager;
                                 employee.push(employeeManagerID)
                             })
+                            .then(employeeInput => {
+                                console.log(employee)
+                                db.addNewEmployee(employee).then(() => {
+                                    console.log("\n \n")
+                                    console.log(`New employee added!`)
+                                    promptUser()
+                                })
+                            })
                     })
-                .then(show => {
-                    console.log(employee)
-                    db.addNewEmployee(employee).then(data => {
-                        console.log("\n \n")
-                        console.table(data[1]);
-                    })
-                })  
             })
     })
-
-
-
-
-    // .then(rawEmployees => {
-    //     console.log(rawEmployees)
-    //     const employee = Object.values(rawEmployees);
-    //     console.log(employee)
-    // db.addNewEmployee(employee).then(() => {
-    //     console.log("\n");
-    //     console.log(`${rawEmployees.first_name} added as a new employee!`);
-    //     console.log("\n");
-    //     promptUser()
-    // })
-    // })
-
 }
 
-const promptUser = () => {
-    return inquirer
-        .prompt([
-            {
-                type: 'list',
-                name: 'mainMenu',
-                message: 'What would you like to do?',
-                choices: [
-                    'View all employees',
-                    'Add an employee',
-                    'Update an employee role',
-                    'View all roles',
-                    'Add a role',
-                    'View all departments',
-                    'Add a Department',
-                    'Exit']
-            }
-        ])
-        .then((answers) => {
-            if (answers.mainMenu === 'View all employees') {
-                allEmployees()
-            }
-            if (answers.mainMenu === 'Add an employee') {
-                addEmployeePrompt()
-            }
-            if (answers.mainMenu === 'Update an employee role') {
-                console.log(answers);
-            }
-            if (answers.mainMenu === 'View all roles') {
-                allRoles()
-            }
-            if (answers.mainMenu === 'Add a role') {
-                addRolePrompt()
-            }
-            if (answers.mainMenu === 'View all departments') {
-                allDepartments()
-            }
-            if (answers.mainMenu === 'Add a Department') {
-                addDepartmentPrompt()
-            }
-            if (answers.mainMenu === 'Exit') {
-                return;
-            }
+const updateEmployeePrompt = () => {
+    db.addEmployeeList().then(employeeArray => {
+        let employeeChoices = employeeArray[0].map(employee => ({ name: employee.employee, value: employee.id }))
+        return inquirer
+            .prompt([
+                {
+                    type: 'list',
+                    name: 'employee',
+                    message: 'Please select employee you would like to update',
+                    choices: employeeChoices
+                }
+            ])
+            .then(incompleteEdit => {
+                console.log(incompleteEdit)
+                const update = Object.values(incompleteEdit);
+                console.log(update)
+                db.addEmployeeRole()
+                    .then(roleArray => {
+                        let roleChoices = roleArray[0].map(role => ({ name: role.title, value: role.id }))
+                        return inquirer
+                            .prompt([
+                                {
+                                    type: 'list',
+                                    name: 'role',
+                                    message: 'What is their new role?',
+                                    choices: roleChoices
+                                }
+                            ])
+                            .then(employeeNewRole => {
+                                let employeeRole = employeeNewRole.role;
+                                console.log(employeeRole)
+                                update.unshift(employeeRole)
+                                console.log(update)
+                                // update.push(employeeRole)
+                            })
+                            .then(updateFinished => {
+                                console.log(update)
+                                db.updateEmployee(update).then(() => {                                console.log("\n \n")
+                                console.log(`Employee updated!`)
+                                promptUser()
+                            })
+                        })
+                    })
+            })
         })
-};
+    }
 
-init();
+const promptUser = () => {
+            return inquirer
+                .prompt([
+                    {
+                        type: 'list',
+                        name: 'mainMenu',
+                        message: 'What would you like to do?',
+                        choices: [
+                            'View all employees',
+                            'Add an employee',
+                            'Update an employee role',
+                            'View all roles',
+                            'Add a role',
+                            'View all departments',
+                            'Add a Department',
+                            'Exit']
+                    }
+                ])
+                .then((answers) => {
+                    if (answers.mainMenu === 'View all employees') {
+                        allEmployees()
+                    }
+                    if (answers.mainMenu === 'Add an employee') {
+                        addEmployeePrompt()
+                    }
+                    if (answers.mainMenu === 'Update an employee role') {
+                        updateEmployeePrompt()
+                    }
+                    if (answers.mainMenu === 'View all roles') {
+                        allRoles()
+                    }
+                    if (answers.mainMenu === 'Add a role') {
+                        addRolePrompt()
+                    }
+                    if (answers.mainMenu === 'View all departments') {
+                        allDepartments()
+                    }
+                    if (answers.mainMenu === 'Add a Department') {
+                        addDepartmentPrompt()
+                    }
+                    if (answers.mainMenu === 'Exit') {
+                        return;
+                    }
+                })
+        };
+
+        init();

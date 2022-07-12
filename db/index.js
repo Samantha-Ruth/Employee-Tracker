@@ -53,6 +53,13 @@ class Queries {
         .query
         (`SELECT * FROM role`, (roleArray))
     }
+    pushNone () {
+        return this.connection
+        .promise()
+        .query
+        (`INSERT INTO employee (first_name, last_name, role_id, manager_id)
+        VALUES (null, null, 0, 0);`)
+    }
     addEmployeeManager (managerArray) {
         return this.connection
         .promise()
@@ -67,6 +74,22 @@ class Queries {
         .query
         (`INSERT INTO employee (first_name, last_name, role_id, manager_id)
         VALUES (?,?,?,?);`, employee)
+    }
+    addEmployeeList (employeeArray) {
+        return this.connection
+        .promise()
+        .query
+        (`SELECT CONCAT(employee.first_name, ' ',employee.last_name) AS employee, employee.id
+        FROM employee
+        LEFT JOIN employee manager ON manager.id = employee.manager_id`, (employeeArray))
+    }
+    updateEmployee(update) {
+        return this.connection
+        .promise()
+        .query
+        (`UPDATE employee 
+        SET role_id = ?
+        WHERE id = ?;`, (update))
     }
 
     
