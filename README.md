@@ -36,14 +36,14 @@ Finally, connect the server by entering "npm start" into the command line.
 
 The user will be presented with a list of options regarding an employee database.  They can view all departments, roles, and employees, as well as add departments, roles, and employees.  The user gets access to the database using the console line and can adjust data as desired.  
 
-Image of employee table":
+
 ![Screenshot of Employees](https://user-images.githubusercontent.com/64170123/178384602-b23ed9db-53fc-4b43-bddb-ff2b0be9d63b.jpg)
 
 
-Image of roles table:
+
 ![Screenshot of Roles](https://user-images.githubusercontent.com/64170123/178384607-947f2266-b47b-4e36-9501-3afddf20a915.jpg)
 
-Image of department table:
+
 ![Screen shot of department](https://user-images.githubusercontent.com/64170123/178384619-b45b8c5f-d782-419e-8d42-2880d87f9c9f.jpg)
 
 
