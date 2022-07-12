@@ -117,9 +117,7 @@ const addRolePrompt = () => {
                 }
             ])
             .then(rawRoles => {
-                console.log(rawRoles)
                 let role = [rawRoles.title, rawRoles.salary, rawRoles.department_id];
-                console.log(role)
                 db.addNewRole(role).then(() => {
                     console.log("\n");
                     console.log(`${rawRoles.title} added as a new role!`);
@@ -168,9 +166,7 @@ const addEmployeePrompt = () => {
             }
         ])
             .then(incompleteEmployees => {
-                console.log(incompleteEmployees)
                 const employee = Object.values(incompleteEmployees);
-                console.log(employee)
                 db.addEmployeeManager()
                     .then(managerArray => {
                         let managerChoices = managerArray[0].map(manager => ({ name: manager.manager, value: manager.id }))
@@ -187,7 +183,6 @@ const addEmployeePrompt = () => {
                                 employee.push(employeeManagerID)
                             })
                             .then(employeeInput => {
-                                console.log(employee)
                                 db.addNewEmployee(employee).then(() => {
                                     console.log("\n \n")
                                     console.log(`New employee added!`)
@@ -212,9 +207,7 @@ const updateEmployeePrompt = () => {
                 }
             ])
             .then(incompleteEdit => {
-                console.log(incompleteEdit)
                 const update = Object.values(incompleteEdit);
-                console.log(update)
                 db.addEmployeeRole()
                     .then(roleArray => {
                         let roleChoices = roleArray[0].map(role => ({ name: role.title, value: role.id }))
@@ -229,14 +222,11 @@ const updateEmployeePrompt = () => {
                             ])
                             .then(employeeNewRole => {
                                 let employeeRole = employeeNewRole.role;
-                                console.log(employeeRole)
                                 update.unshift(employeeRole)
-                                console.log(update)
-                                // update.push(employeeRole)
                             })
                             .then(updateFinished => {
-                                console.log(update)
-                                db.updateEmployee(update).then(() => {                                console.log("\n \n")
+                                db.updateEmployee(update).then(() => {                                
+                                console.log("\n \n")
                                 console.log(`Employee updated!`)
                                 promptUser()
                             })
